@@ -117,8 +117,8 @@ public class MainPanel extends JPanel implements ActionListener{
       
 
       
-      
-      
+      // this didn't work here! :(  .. trying JFrame next...  fuck yes! it worked.
+    // spaceview.ship.requestFocus();
       
       
       

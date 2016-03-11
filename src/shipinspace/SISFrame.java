@@ -87,6 +87,9 @@ public class SISFrame extends JFrame{
                
                
 		setVisible(true);
+                
+                 main.spaceview.ship.requestFocus();
+                
     }
  
   
