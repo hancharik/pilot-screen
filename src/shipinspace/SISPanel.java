@@ -43,9 +43,9 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     
     JLabel readout = new JLabel("readout");
     
-        int galaxyX = -300;
-    
-    int galaxyY = -1000;
+        int galaxyX = -845251357;
+                   
+    int galaxyY = -978734625;
     MainPanel mainScreen;
     
     
