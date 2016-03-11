@@ -78,15 +78,15 @@ public class MainPanel extends JPanel implements ActionListener{
       int viewWidth = viewSize*3;
       int viewHeight = viewSize*2;
       
-          readout1 = new JLabel("1");
-      readout1.setBounds(940, 940, 300, 40);
-      readout2 = new JLabel("2");
-      readout2.setBounds(240, 470, 300, 40);
-      readout3 = new JLabel("3");
-      readout3.setBounds(240, 940, 300, 40);
+          readout1 = new JLabel("");
+      readout1.setBounds(940, 900, 800, 40);
+      readout2 = new JLabel("");
+      readout2.setBounds(100, 437, 400, 40);
+      readout3 = new JLabel("");
+      readout3.setBounds(100, 916, 500, 40);
       
       
-      add(readout1);
+    add(readout1);
     add(readout2);
    add(readout3);
       
@@ -95,7 +95,7 @@ public class MainPanel extends JPanel implements ActionListener{
      
       
       galaxyMapPanel = createGalaxyMap();//galaxyMapPanel = createGalaxyMap();
-      galaxyMapPanel.setBounds(40,40,viewSize,viewSize);
+      galaxyMapPanel.setBounds(40,20,viewSize,viewSize);
       
    add(galaxyMapPanel);
       
@@ -112,6 +112,15 @@ public class MainPanel extends JPanel implements ActionListener{
       //colorGbutton(6,5);
      // colorSSbutton(2,8);
       
+     
+     
+      setReadout1(" .04% warp at 273 degrees");
+     
+     
+     
+     
+     
+     
       repaint();
       
       
@@ -210,21 +219,21 @@ public class MainPanel extends JPanel implements ActionListener{
     
   public void setReadout1(String entry){
       
-    readout1.setText(entry);
+    readout1.setText("<html><h1><font color='white' >" + entry + "</font></h1></html>");//readout2.setText(entry);
 
   }
   
     
   public void setReadout2(String entry){
       
-    readout2.setText(entry);
+    readout2.setText("<html><h1><font color='white' >" + entry + "</font></h1></html>");//readout2.setText(entry);
 
   }
   
     
   public void setReadout3(String entry){
       
-    readout3.setText(entry);
+    readout3.setText("<html><h1><font color='white' >" + entry + "</font></h1></html>");
 
   }
 
@@ -249,7 +258,7 @@ public class MainPanel extends JPanel implements ActionListener{
             }
             
           
-      setReadout1("smallX: "+ smallX +", smallY: "+ smallY);
+     // setReadout1("smallX: "+ smallX +", smallY: "+ smallY);
             
            counter++; 
         }

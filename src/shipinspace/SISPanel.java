@@ -35,6 +35,9 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     int height = 1080;
     int width = 1920;
     
+    int tempX = 0;
+    int tempY = 0;
+    double angleOfMovement = 0.0;
     
     int realgx;// = (galaxyX/21)%20-1;
     int realgy;// = (galaxyY/21)%20-1; //int realgy = galaxyY/21;   
@@ -73,10 +76,10 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         ship.addKeyListener(this);
         add(ship);
         
-        readout = new JLabel("readout");
-        readout.setBounds(100,100,300,60);
-        readout.setForeground(Color.yellow);
-        add(readout);
+       // readout = new JLabel("readout");
+       // readout.setBounds(100,100,300,60);
+       // readout.setForeground(Color.yellow);
+       // add(readout);
         t = new Timer(2, this);
         t.start();
     }
@@ -153,6 +156,8 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
             moveShip();
             checkForWrap();
             displayStats();
+            getAngle();
+            
             
     //setBackground(Color.BLACK);
         }
@@ -165,6 +170,30 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         
     }  // end action listener
 
+    
+   private void getAngle(){
+       int grabX = Math.abs(ship.getX());
+       int grabY = Math.abs(ship.getY());
+       
+       
+       double distance = Math.sqrt((grabX-tempX)*(grabX-tempX)+(grabY-tempY)*(grabY-tempY));
+       
+       if(distance > 10){
+           
+          
+       angleOfMovement = getAngleInDegrees(tempX, tempY, grabX, grabY);
+       tempX = grabX;
+       tempY = grabY;   
+           
+       }
+       
+     
+   
+   }
+    
+    
+    
+    
     
     
     private void displayStats(){
@@ -180,8 +209,32 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
        mainScreen.bigY = realgy;
         
         
+       
+       int xHere = (int)Math.abs(Math.ceil(xVelocity));
+       int yHere = (int)Math.abs(Math.ceil(yVelocity));
+       String tempReadout = "zooom!!!!!";
+      double converted = 0.0;
+       if(xHere >= yHere){
+           converted = (double)xHere/100.0;
+         
+       }else{
+            converted = (double)yHere/100.0;
+          
+       }
+       
+       
+       int degreesToTwo = (int)(Math.ceil(angleOfMovement));
+       
+       
+       
+       tempReadout = "" + converted + "% warp || " + degreesToTwo + " degrees"  ; 
+       
         
-        String tempReadout = "realx:  " + realx + ", realy: " + realy + ", realgx: " +   realgx  + ", realgy: " +  realgy;
+        
+        
+        
+        
+        
 
         if(mainScreen.travelling == true){
          setLabel1(tempReadout);
@@ -279,18 +332,22 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         
     public void setLabel1(String s){
         
-       mainScreen.setReadout1(s);
+    mainScreen.setReadout1(s);
          
  
        
          mainScreen.setReadout2("Galaxy Coordinates: (" +  realgx + "," +  realgy  + ")");
         //mainScreen.setReadout2("Galaxy Coordinates: (" +(Math.abs(galaxyX)/21)+ "," +(Math.abs(galaxyY)/21)+ ")");
-          mainScreen.setReadout3("Local Solar System Coordinates: (" +realx+ "," +realy+ ")");
+          mainScreen.setReadout3("Local Coordinates: (" +realx+ "," +realy+ ")");
  
-        String plusminusX = "+";
-        String plusminusY = "-";
-        String tempReadout = "realx:  " + realx + ", realy: " + realy + ", realgx: " +   realgx  + ", realgy: " +  realgy;
-        readout.setText(tempReadout);
+          
+    
+          
+          
+       // String plusminusX = "+";
+       // String plusminusY = "-";
+       // String tempReadout = "You are really at :  (" + galaxyX + "," + galaxyY + ")";
+        //readout.setText(tempReadout);
  
     }    
         
@@ -298,6 +355,17 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         
         
         
+    
+   //http://stackoverflow.com/questions/9970281/java-calculating-the-angle-between-two-points-in-degrees
+public static double getAngleInDegrees(double x, double y, double x2, double y2) {
+    double angle = (double) Math.toDegrees(Math.atan2(y2 - y, x2 - x));
+
+    if(angle < 0){
+        angle += 360;
+    }
+
+    return angle;
+}   
         
         
         
