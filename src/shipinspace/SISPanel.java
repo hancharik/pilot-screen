@@ -22,15 +22,21 @@ import javax.swing.Timer;
 public class SISPanel extends JPanel implements ActionListener, KeyListener{
 
     JButton ship;
-    int shipSize = 20;
+    int shipSize = 8;
     Timer t;
     int x = 600;
     int y= 600;
+    
+    
     double xPosition = 600.237;
     double yPosition = 600.237;
+    
+    
     double xVelocity = 0.00;
     double yVelocity = 0.00;
-    double thrust = 0.12;
+    
+    
+    double thrust = 0.012;
     
     int height = 1080;
     int width = 1920;
@@ -51,12 +57,14 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     int galaxyY = -978734625;
     MainPanel mainScreen;
     
+    RoundButton planet;// = new RoundButton();
+    
     
     int counter = 0;
     
     public SISPanel(int w, int h, MainPanel m) {
         
-        super();
+        super(true);
         
         height = h;
         width = w;
@@ -75,6 +83,14 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         ship.setBackground(Color.WHITE);
         ship.addKeyListener(this);
         add(ship);
+        
+        
+        planet = new RoundButton();
+        planet.setBackground(Color.green);
+        planet.setBounds(400,200,400,400);
+        planet.setVisible(false);
+        add(planet);
+        
         
        // readout = new JLabel("readout");
        // readout.setBounds(100,100,300,60);
@@ -178,7 +194,7 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
        
        double distance = Math.sqrt((grabX-tempX)*(grabX-tempX)+(grabY-tempY)*(grabY-tempY));
        
-       if(distance > 10){
+       if(distance > 242){
            
           
        angleOfMovement = getAngleInDegrees(tempX, tempY, grabX, grabY);
@@ -192,7 +208,7 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
    }
     
     
-    
+   
     
     
     
@@ -273,6 +289,8 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
             xPosition = 0.0;
              galaxyX++;
      mainScreen.travelling = true;
+      tempX = ship.getX();
+       tempY = ship.getY();
         }
 
         if (ship.getX() <0) {
@@ -280,12 +298,16 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
             xPosition = (double)width;
              galaxyX--;
         mainScreen.travelling = true;
+         tempX = ship.getX();
+       tempY = ship.getY();
         }
         if (ship.getY() > height) {
             ship.setLocation(ship.getX(),0);
             yPosition = 0.0;
              galaxyY++;
   mainScreen.travelling = true;
+   tempX = ship.getX();
+       tempY = ship.getY();
         }
 
         if (ship.getY() < 0) {
@@ -293,12 +315,20 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
             yPosition = (double)height;
              galaxyY--;
       mainScreen.travelling = true;
+       tempX = ship.getX();
+       tempY = ship.getY();
         }
          if(realx==10 && realy==10){
             //readout.setText("SOLAR SYSTEM!!!!! FUCK YES BABY!!!! WHOOOOOOO!!!!!!!!!!!!!!!!");
             setBackground(Color.YELLOW);
+          
+         }else if(realx==9 && realy==9){
+            //readout.setText("SOLAR SYSTEM!!!!! FUCK YES BABY!!!! WHOOOOOOO!!!!!!!!!!!!!!!!");
+         
+            planet.setVisible(true);
          }else{
-            setBackground(Color.BLACK);  
+            setBackground(Color.BLACK); 
+             planet.setVisible(false);
          }
         
     }  // end check for y wrap
