@@ -25,7 +25,7 @@ public class PilotPanel extends JPanel implements ActionListener, KeyListener{
     
     JButton ship;
     int shipSize = 8;
-    double shipEngine = 100.0;  // number between 1 and 100 (above 100 is starship class, 1-100 is interplanetary ship)
+    double shipEngine = 1.0;  // default = 1.0   range is between 1 and 100 (above 100 is starship class, 1-100 is interplanetary ship)
     double globalMultiplier = 0.01;  // 0.01 is the default, i think that value works best, just wanted control over it...    
         // thrust sets a value in a world where warp 1.0 = 100.0.  minimum is 0.01, less than .01 is interplanetary ship only (like shuttlecraft or something)  
         // so, if thrust is equal to 100.0, every time you press the button you increase your speed by warp 1
