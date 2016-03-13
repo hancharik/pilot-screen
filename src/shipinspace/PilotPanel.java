@@ -19,10 +19,22 @@ import javax.swing.Timer;
  *
  * @author mark
  */
-public class SISPanel extends JPanel implements ActionListener, KeyListener{
+public class PilotPanel extends JPanel implements ActionListener, KeyListener{
 
+    
+    
     JButton ship;
     int shipSize = 8;
+    double shipEngine = 100.0;  // number between 1 and 100 (above 100 is starship class, 1-100 is interplanetary ship)
+    double globalMultiplier = 0.01;  // 0.01 is the default, i think that value works best, just wanted control over it...    
+        // thrust sets a value in a world where warp 1.0 = 100.0.  minimum is 0.01, less than .01 is interplanetary ship only (like shuttlecraft or something)  
+        // so, if thrust is equal to 100.0, every time you press the button you increase your speed by warp 1
+        // right now warp isn't logarithmic, so we need to fix that... 03/13/16
+        double thrust = shipEngine * globalMultiplier;
+    
+    
+    
+    
     Timer t;
     int x = 600;
     int y= 600;
@@ -36,7 +48,7 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     double yVelocity = 0.00;
     
     
-    double thrust = 0.012;
+   
     
     int height = 1080;
     int width = 1920;
@@ -50,6 +62,10 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     int realx;// = (21-(Math.abs(galaxyX)%21))-1;
     int realy;// = (21-(Math.abs(galaxyY)%21))-1;
     
+    double distanceTravelled = 0.0;
+    
+    int speed = 0;
+    
     JLabel readout = new JLabel("readout");
     
         int galaxyX = -845251357;
@@ -62,7 +78,7 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     
     int counter = 0;
     
-    public SISPanel(int w, int h, MainPanel m) {
+    public PilotPanel(int w, int h, MainPanel m) {
         
         super(true);
         
@@ -92,10 +108,13 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
         add(planet);
         
         
-       // readout = new JLabel("readout");
-       // readout.setBounds(100,100,300,60);
-       // readout.setForeground(Color.yellow);
-       // add(readout);
+     
+        //readout = new JLabel("readout");
+    //    readout.setBounds(100,100,300,60);
+     //   readout.setForeground(Color.yellow);
+      //  add(readout);
+      
+      
         t = new Timer(2, this);
         t.start();
     }
@@ -172,8 +191,9 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
             moveShip();
             checkForWrap();
             displayStats();
-            getAngle();
             
+            
+           // readout.setText("xVelocity: "+ xVelocity+", yVelocity: "+ yVelocity);
             
     //setBackground(Color.BLACK);
         }
@@ -187,20 +207,44 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
     }  // end action listener
 
     
-   private void getAngle(){
+   private void getAngle(boolean tooFastForOdometer){
+       boolean fastTravel = tooFastForOdometer;
+       
        int grabX = Math.abs(ship.getX());
        int grabY = Math.abs(ship.getY());
        
        
        double distance = Math.sqrt((grabX-tempX)*(grabX-tempX)+(grabY-tempY)*(grabY-tempY));
        
-       if(distance > 242){
+       // above warp 12.6 we loose the odometer, so we added this
+       if(fastTravel){
+        distanceTravelled = distanceTravelled + distance;   
+       }
+    //    distanceTravelled = distanceTravelled + distance;
+       // set sensitivity for compass
+        // set sensitivity for compass
+       int surveyDistance = 242;
+       
+       if(speed < 20){
+         surveyDistance = 11;  
+       }
+        if(speed < 10){
+         surveyDistance = 1;  
+       }
+       
+       
+       
+       
+       if(distance > surveyDistance){
            
           
        angleOfMovement = getAngleInDegrees(tempX, tempY, grabX, grabY);
        tempX = grabX;
        tempY = grabY;   
-           
+         
+       // add to the odometer
+       distanceTravelled = distanceTravelled + distance;   
+       
        }
        
      
@@ -230,22 +274,63 @@ public class SISPanel extends JPanel implements ActionListener, KeyListener{
        int yHere = (int)Math.abs(Math.ceil(yVelocity));
        String tempReadout = "zooom!!!!!";
       double converted = 0.0;
-       if(xHere >= yHere){
+      
+      if(xHere > yHere){
            converted = (double)xHere/100.0;
-         
+        speed = xHere*100;
        }else{
-            converted = (double)yHere/100.0;
-          
+           converted = (double)yHere/100.0;
+           speed = yHere;
        }
-       
+      
+      
+      
+      if(converted < 0.01){
+         double impulseSpeed;   
+       if(xHere > yHere){
+          // converted = (double)xHere/100.0;
+          impulseSpeed = (xVelocity*100);//(int)xVelocity*100;
+       }else{
+          //  converted = (double)yHere/100.0;
+           impulseSpeed = (yVelocity*100);//(int)yVelocity*100;
+       }
+       impulseSpeed = Math.abs(impulseSpeed);
+       int degreesToTwo = (int)(Math.ceil(angleOfMovement));
+       tempReadout ="impulse speed " +  (int)impulseSpeed + " || " + degreesToTwo + " degrees"   + " || " + " distance = " + (int)distanceTravelled; // convert distance travelled to int for readout
+      getAngle(false);
+      // tempReadout = "speed = " + speed + ",  impulse speed " +  (int)impulseSpeed + " || " + degreesToTwo + " degrees"   + " || " + " distance = " + (int)distanceTravelled; // convert distance travelled to int for readout
+      
+      } else if(converted < .10){
+         double impulseSpeed;   
+       if(xHere > yHere){
+          // converted = (double)xHere/100.0;
+          impulseSpeed = (xVelocity*100);//(int)xVelocity*100;
+       }else{
+          //  converted = (double)yHere/100.0;
+           impulseSpeed = (yVelocity*100);//(int)yVelocity*100;
+       }
+       impulseSpeed = Math.abs(impulseSpeed);
+       int degreesToTwo = (int)(Math.ceil(angleOfMovement));
+       tempReadout = "impulse speed " +  (int)impulseSpeed + " || " + degreesToTwo + " degrees"   + " || " + " distance = " + (int)distanceTravelled; // convert distance travelled to int for readout
+      
+      getAngle(false); 
+      } else if(converted < 1.0){
+       int degreesToTwo = (int)(Math.ceil(angleOfMovement));
+        tempReadout =  + converted + "% warp || " + degreesToTwo + " degrees"    + " || " + " distance = " + (int)distanceTravelled ;  // convert distance travelled to int for readout
+       getAngle(true); 
+      } else{
+            
        
        int degreesToTwo = (int)(Math.ceil(angleOfMovement));
+        tempReadout =  "warp " + converted + " || " + degreesToTwo + " degrees"    + " || " + " distance = " + (int)distanceTravelled ;  // convert distance travelled to int for readout
+       getAngle(true); 
+              }
+      
+      
+      
+    
        
-       
-       
-       tempReadout = "" + converted + "% warp || " + degreesToTwo + " degrees"  ; 
-       
-        
+     
         
         
         

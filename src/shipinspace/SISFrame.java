@@ -34,7 +34,7 @@ public class SISFrame extends JFrame{
     
     
     
-  //  public SISPanel sisPanel;// = new GameJPanel();
+  //  public PilotPanel sisPanel;// = new GameJPanel();
   //  public ShipOnGround sog = new ShipOnGround();
    //public PicPanel pic;//  = new PicPanel();
  //  public Ninja ninja;// = new Ninja();
@@ -52,7 +52,7 @@ public class SISFrame extends JFrame{
        
         super ("A Ship In Space.");
                 getContentPane().setLayout(new BorderLayout());
-               // sisPanel  = new SISPanel(screenWidth,screenHeight);
+               // sisPanel  = new PilotPanel(screenWidth,screenHeight);
                main = new MainPanel();
             getContentPane().add(main,"Center");
                //  getContentPane().add(sog,"Center");

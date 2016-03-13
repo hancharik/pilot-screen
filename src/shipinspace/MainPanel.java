@@ -20,7 +20,7 @@ import javax.swing.Timer;
  */
 public class MainPanel extends JPanel implements ActionListener{
     
-    SISPanel spaceview;
+    PilotPanel spaceview;
     JLabel readout1;
     JLabel readout2;
     JLabel readout3;
@@ -105,7 +105,7 @@ public class MainPanel extends JPanel implements ActionListener{
      add(solarSystemMapPanel);
       
 
-       spaceview = new SISPanel(viewWidth,viewHeight, this);
+       spaceview = new PilotPanel(viewWidth,viewHeight, this);
       spaceview.setBounds(600,40,viewWidth,viewHeight);
       add(spaceview);
       
@@ -113,8 +113,8 @@ public class MainPanel extends JPanel implements ActionListener{
      // colorSSbutton(2,8);
       
      
-     
-      setReadout1(" .04% warp at 273 degrees");
+     // this was the original idea place holder, i think we did a good job approximating it!
+      //setReadout1(" .04% warp at 273 degrees");
      
      
      
