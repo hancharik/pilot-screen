@@ -12,19 +12,22 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author mark
  */
-public class MainPanel extends JPanel implements ActionListener{
+public class MainPanel extends JPanel implements ActionListener, ChangeListener{
     
     PilotPanel spaceview;
     JLabel readout1;
     JLabel readout2;
     JLabel readout3;
-    
+    JLabel thrustReadout;
    //  public GalaxyMapPanel galaxyMapPanel;
   //  public SolarSystemMapPanel solarSystemMapPanel;
     
@@ -50,6 +53,13 @@ public class MainPanel extends JPanel implements ActionListener{
    boolean travelling = false;
    boolean showTrail = false;
     
+   
+   JSlider thrustSlider;
+   
+   
+   
+   
+   
     public  MainPanel(){
     
         super();
@@ -86,6 +96,17 @@ public class MainPanel extends JPanel implements ActionListener{
       readout3.setBounds(100, 916, 500, 40);
       
       
+      thrustReadout = new JLabel();
+      thrustReadout.setBounds(1360, 960, 200, 60);
+      thrustSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
+      thrustSlider.setBounds(940, 960, 400,40);
+      thrustSlider.setBackground(Color.blue);
+      thrustSlider.addChangeListener(this);
+      add(thrustSlider);
+      add(thrustReadout);
+      
+      
+      
     add(readout1);
     add(readout2);
    add(readout3);
@@ -108,7 +129,8 @@ public class MainPanel extends JPanel implements ActionListener{
        spaceview = new PilotPanel(viewWidth,viewHeight, this);
       spaceview.setBounds(600,40,viewWidth,viewHeight);
       add(spaceview);
-      
+      thrustReadout.setText("<html><h1><font color='white' >" + "thrust = " + spaceview.thrust + "</font></h1></html>");
+     
       //colorGbutton(6,5);
      // colorSSbutton(2,8);
       
@@ -272,7 +294,16 @@ public class MainPanel extends JPanel implements ActionListener{
     }  // end action listener
   
   
-  
+      @Override
+        public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+       
+        if (source == thrustSlider) {
+            int ttdva = source.getValue(); 
+            spaceview.thrust = (double)ttdva/100.0;
+            thrustReadout.setText("<html><h1><font color='white' >" + "thrust = " + spaceview.thrust + "</font></h1></html>");
+        }
+        }
   
   
     
